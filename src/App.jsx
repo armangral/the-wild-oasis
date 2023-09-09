@@ -1,10 +1,7 @@
 import styled from "styled-components";
 import GlobalStyles from "./styles/GlobalStyles";
-
-const H1 = styled.h1`
-  font-weight: 600;
-  font-size: 36px;
-`;
+import Heading from "./ui/Heading";
+import Row from "./ui/Row";
 
 const Button = styled.button`
   font-size: 1.4rem;
@@ -16,14 +13,28 @@ const Button = styled.button`
   color: white;
 `;
 
+const StyledApp = styled.div`
+  /* background-color: aqua; */
+  padding: 20px;
+`;
+
 function App() {
   return (
     <>
       <GlobalStyles />
-      <div>
-        <H1>Hello</H1>
-        <Button>Click</Button>
-      </div>
+      <StyledApp>
+        <Row type="horizontal">
+          <Heading as="h1">Hello</Heading>
+          <Button>Click</Button>
+          <Heading as="h3">Hello</Heading>
+        </Row>
+
+        <Row type="vertical">
+          <Heading as="h1">Hello</Heading>
+          <Button>Click</Button>
+          <Heading as="h3">Hello</Heading>
+        </Row>
+      </StyledApp>
     </>
   );
 }
