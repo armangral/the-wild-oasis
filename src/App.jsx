@@ -1,40 +1,33 @@
-import styled from "styled-components";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+
 import GlobalStyles from "./styles/GlobalStyles";
-import Heading from "./ui/Heading";
-import Row from "./ui/Row";
-
-const Button = styled.button`
-  font-size: 1.4rem;
-  padding: 1.2rem 1.6rem;
-  font-weight: 500;
-  border: none;
-  border-radius: var(--border-radius-sm);
-  background-color: var(--color-brand-600);
-  color: white;
-`;
-
-const StyledApp = styled.div`
-  /* background-color: aqua; */
-  padding: 20px;
-`;
+import Dashboard from "./pages/Dashboard";
+import Bookings from "./pages/Bookings";
+import Cabins from "./pages/Cabins";
+import Users from "./pages/Users";
+import Settings from "./pages/Settings";
+import Account from "./pages/Account";
+import Login from "./pages/Login";
+import PageNotFound from "./pages/PageNotFound";
 
 function App() {
   return (
     <>
       <GlobalStyles />
-      <StyledApp>
-        <Row type="horizontal">
-          <Heading as="h1">Hello</Heading>
-          <Button>Click</Button>
-          <Heading as="h3">Hello</Heading>
-        </Row>
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<Navigate replace to="dashboard" />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="bookings" element={<Bookings />} />
+          <Route path="cabins" element={<Cabins />} />
+          <Route path="users" element={<Users />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="account" element={<Account />} />
 
-        <Row type="vertical">
-          <Heading as="h1">Hello</Heading>
-          <Button>Click</Button>
-          <Heading as="h3">Hello</Heading>
-        </Row>
-      </StyledApp>
+          <Route path="login" element={<Login />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
