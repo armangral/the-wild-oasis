@@ -29,7 +29,7 @@ import Pagination from "../../ui/Pagination";
 // We want each table row to have a menu, and we only want one of them to be open at the same time. We also want this functionality to be reusable. We could add a openID state here to the table, but that wouldn't really be reusable... The best way is to use a compound component
 
 function BookingTable() {
-  const { bookings, isLoading } = useBooking();
+  const { bookings, isLoading, count } = useBooking();
 
   if (isLoading) return <Spinner />;
   if (!bookings.length) return <Empty resource={"bookings"} />;
@@ -63,7 +63,7 @@ function BookingTable() {
         />
       </Table>
       <Table.Footer>
-        <Pagination count={15} />
+        <Pagination count={count} />
       </Table.Footer>
     </Menus>
   );
