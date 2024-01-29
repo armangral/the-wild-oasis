@@ -9,7 +9,8 @@ import Table from "../../ui/Table";
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
 import { format, isToday } from "date-fns";
-import { HiArrowDownOnSquare, HiEye } from "react-icons/hi2";
+import { HiArrowDownOnSquare, HiArrowUpOnSquare, HiEye } from "react-icons/hi2";
+import { useCheckout } from "../check-in-out/useCheckout";
 
 // v1
 // const TableRow = styled.div`
@@ -66,6 +67,8 @@ function BookingRow({
   },
 }) {
   const navigate = useNavigate();
+
+  const { checkout, isCheckingOut } = useCheckout();
   // We will not allow editing at this point, as it's too complex for bookings... People just need to delete a booking and create a new one
 
   const statusToTagName = {
@@ -111,9 +114,19 @@ function BookingRow({
           {status === "unconfirmed" && (
             <Menus.Button
               icon={<HiArrowDownOnSquare />}
-              onClick={() => navigate(`/bookings/${bookingId}`)}
+              onClick={() => navigate(`/checkin/${bookingId}`)}
             >
               Check in
+            </Menus.Button>
+          )}
+
+          {status === "checked-in" && (
+            <Menus.Button
+              icon={<HiArrowUpOnSquare />}
+              onClick={() => checkout(bookingId)}
+              disabled={isCheckingOut}
+            >
+              Check Out
             </Menus.Button>
           )}
         </Menus.List>
