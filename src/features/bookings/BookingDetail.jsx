@@ -14,6 +14,7 @@ import ButtonGroup from "../../ui/ButtonGroup";
 import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
+import { useMoveBack } from "../../hooks/useMoveBack";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -21,10 +22,19 @@ const HeadingGroup = styled.div`
   align-items: center;
 `;
 
+const Box = styled.div`
+  /* Box */
+  background-color: var(--color-grey-0);
+  border: 1px solid var(--color-grey-100);
+  border-radius: var(--border-radius-md);
+  padding: 2.4rem 4rem;
+`;
+
 function BookingDetail() {
   const { booking, isLoading } = useBooking();
 
   const navigate = useNavigate();
+  const moveBack = useMoveBack();
 
   if (isLoading) return <Spinner />;
   // if (!booking) return <Empty resource='booking' />;
@@ -45,11 +55,11 @@ function BookingDetail() {
           <Heading type="h1">Booking #{bookingId}</Heading>
           <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
         </HeadingGroup>
-        <ButtonText>&larr; Back</ButtonText>
+        <ButtonText onClick={moveBack}>&larr; Back</ButtonText>
       </Row>
 
       <BookingDataBox booking={booking} />
-      {/* <ButtonGroup>
+      <ButtonGroup>
         {status === "unconfirmed" && (
           <Button onClick={() => navigate(`/checkin/${bookingId}`)}>
             Check in
@@ -58,17 +68,10 @@ function BookingDetail() {
 
         {status === "checked-in" && <Button>Check out</Button>}
 
-        <Modal>
-          <Modal.Toggle opens="delete">
-            <Button variation="danger">Delete booking</Button>
-          </Modal.Toggle>
-          <Modal.Window name="delete">
-            <ConfirmDelete />
-          </Modal.Window>
-        </Modal>
-
-        <Button variation="secondary">Back</Button>
-      </ButtonGroup> */}
+        <Button variation="secondary" onClick={moveBack}>
+          Back
+        </Button>
+      </ButtonGroup>
     </>
   );
 }
