@@ -32,8 +32,7 @@ const Box = styled.div`
     color: var(--color-grey-500);
   }
 `;
-
-function ErrorFallback({ error }) {
+function ErrorFallback({ error, resetErrorBoundary }) {
   return (
     <>
       <GlobalStyles />
