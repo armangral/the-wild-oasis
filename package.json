@@ -13,7 +13,9 @@
     "@supabase/supabase-js": "^2.33.1",
     "@tanstack/react-query": "^4.35.3",
     "@tanstack/react-query-devtools": "^4.35.3",
+    "country-list": "^2.3.0",
     "date-fns": "^2.30.0",
+    "iso-3166-1-alpha-2": "^1.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^4.0.12",
@@ -21,6 +23,8 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.15.0",
+    "react-select": "^5.8.0",
+    "react-select-country-list": "^2.2.3",
     "recharts": "^2.11.0",
     "styled-components": "^6.0.7"
   },
