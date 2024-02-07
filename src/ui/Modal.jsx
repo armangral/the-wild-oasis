@@ -26,6 +26,7 @@ const Overlay = styled.div`
   backdrop-filter: blur(4px);
   z-index: 1000;
   transition: all 0.5s;
+  /* overflow-y: scroll; */
 `;
 
 const Button = styled.button`

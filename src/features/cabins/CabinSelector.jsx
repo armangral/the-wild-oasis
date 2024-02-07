@@ -15,21 +15,21 @@ const StyledSelect = styled.select`
   max-width: 300px;
 `;
 
-function CountrySelector({ options, value, onChange }) {
+function CabinSelector({ options, value, onChange }) {
   return (
     <StyledSelect
-      value={value?.value || ""}
+      value={value?.name || ""}
       onChange={(e) =>
-        onChange(options.find((option) => option.value === e.target.value))
+        onChange(options.find((option) => option.name === e.target.value))
       }
     >
       {options?.map((option) => (
-        <option value={option.value} key={option.value}>
-          {option.label}
+        <option value={option.name} key={option.name}>
+          {option.name}
         </option>
       ))}
     </StyledSelect>
   );
 }
 
-export default CountrySelector;
+export default CabinSelector;

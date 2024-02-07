@@ -1,5 +1,6 @@
+import { useSettings } from "../features/settings/useSettings";
 import { PAGE_SIZE } from "../utils/constants";
-import { getToday } from "../utils/helpers";
+import { getToday, isTodayOrFutureDate } from "../utils/helpers";
 import supabase from "./supabase";
 
 export async function getBookings({ filter, sortBy, page }) {
@@ -126,5 +127,62 @@ export async function deleteBooking(id) {
     console.error(error);
     throw new Error("Booking could not be deleted");
   }
+  return data;
+}
+
+export async function createEditBooking({
+  guest,
+  cabin,
+  breakfast,
+  paid,
+  numNights,
+  startDate,
+  observations,
+  numGuests,
+  breakfastPrice,
+}) {
+  if (!isTodayOrFutureDate(startDate)) {
+    throw new Error("Start date must be today or a future date");
+  }
+  const { id: guestId } = guest;
+  const { id: cabinId, regularPrice: cabinPrice, discount } = cabin;
+  const { value: hasBreakfast } = breakfast;
+  const { value: isPaid } = paid;
+  const status = "unconfirmed";
+  const extrasPrice = hasBreakfast === 1 ? breakfastPrice * numNights : 0;
+  const totalPrice = (cabinPrice - discount) * numNights + extrasPrice;
+  const startdate = new Date(startDate);
+  const endDate = new Date(startdate);
+  endDate.setDate(endDate.getDate() + parseInt(numNights));
+
+  // 1. Create/edit cabin
+  let query = supabase.from("bookings");
+
+  // A) CREATE
+  query = query.insert([
+    {
+      guestId,
+      cabinId,
+      hasBreakfast,
+      isPaid,
+      cabinPrice,
+      numNights,
+      numGuests,
+      startDate,
+      endDate,
+      extrasPrice,
+      totalPrice,
+      observations,
+      status,
+    },
+  ]);
+
+  const { data, error } = await query.select().single();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Booking could not be created");
+  }
+
   return data;
 }

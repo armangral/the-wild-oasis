@@ -15,21 +15,21 @@ const StyledSelect = styled.select`
   max-width: 300px;
 `;
 
-function CountrySelector({ options, value, onChange }) {
+function GuestSelector({ options, value, onChange }) {
   return (
     <StyledSelect
-      value={value?.value || ""}
+      value={value?.fullName || ""}
       onChange={(e) =>
-        onChange(options.find((option) => option.value === e.target.value))
+        onChange(options.find((option) => option.fullName === e.target.value))
       }
     >
       {options?.map((option) => (
-        <option value={option.value} key={option.value}>
-          {option.label}
+        <option value={option.fullName} key={option.fullName}>
+          {option.fullName}
         </option>
       ))}
     </StyledSelect>
   );
 }
 
-export default CountrySelector;
+export default GuestSelector;

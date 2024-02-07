@@ -23,6 +23,7 @@ function AddGuestForm() {
   const changeCountry = (country) => {
     setCountry(country);
     console.log(country);
+    console.log(options[0]);
   };
 
   function onSubmit({ fullName, email, nationalID }) {

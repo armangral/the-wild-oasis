@@ -16,7 +16,13 @@ const Form = styled.form`
     props.type === "modal" &&
     css`
       width: 80rem;
+      /* overflow-y: scroll; */
+      /* display: flex;
+      flex-direction: row;
+      flex-wrap: wrap; */
     `}
+  
+
     
   overflow: hidden;
   font-size: 1.4rem;

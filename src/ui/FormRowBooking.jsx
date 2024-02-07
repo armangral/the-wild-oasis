@@ -3,9 +3,9 @@ import styled from "styled-components";
 const StyledFormRow = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: 24rem 1fr 1.2fr;
-  gap: 2.4rem;
-  padding: 1.2rem 0;
+  grid-template-columns: 12rem 1rem 4rem; /* Using rem and fr units */
+  gap: 2rem; /* Gap between columns in rem */
+  padding: 1.2rem 0rem;
 
   &:first-child {
     padding-top: 0;
@@ -35,7 +35,7 @@ const Error = styled.span`
   color: var(--color-red-700);
 `;
 
-function FormRow({ label, error, children }) {
+function FormRowBooking({ label, error, children }) {
   return (
     <StyledFormRow>
       {label && <Label htmlFor={children.props.id}>{label}</Label>}
@@ -45,4 +45,4 @@ function FormRow({ label, error, children }) {
   );
 }
 
-export default FormRow;
+export default FormRowBooking;
