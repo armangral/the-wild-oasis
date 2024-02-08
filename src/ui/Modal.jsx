@@ -3,7 +3,6 @@ import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
 import { useOutsideClick } from "../hooks/useOutsideClick";
-
 const StyledModal = styled.div`
   position: fixed;
   top: 50%;
@@ -14,6 +13,8 @@ const StyledModal = styled.div`
   box-shadow: var(--shadow-lg);
   padding: 3.2rem 4rem;
   transition: all 0.5s;
+  max-height: 80%;
+  overflow-y: auto;
 `;
 
 const Overlay = styled.div`
@@ -26,7 +27,6 @@ const Overlay = styled.div`
   backdrop-filter: blur(4px);
   z-index: 1000;
   transition: all 0.5s;
-  /* overflow-y: scroll; */
 `;
 
 const Button = styled.button`

@@ -1,6 +1,5 @@
-import { useSettings } from "../features/settings/useSettings";
 import { PAGE_SIZE } from "../utils/constants";
-import { getToday, isTodayOrFutureDate } from "../utils/helpers";
+import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
 export async function getBookings({ filter, sortBy, page }) {
@@ -141,11 +140,13 @@ export async function createEditBooking({
   numGuests,
   breakfastPrice,
 }) {
-  if (!isTodayOrFutureDate(startDate)) {
-    throw new Error("Start date must be today or a future date");
-  }
   const { id: guestId } = guest;
-  const { id: cabinId, regularPrice: cabinPrice, discount } = cabin;
+  const {
+    id: cabinId,
+    regularPrice: cabinPrice,
+    discount,
+    availability,
+  } = cabin;
   const { value: hasBreakfast } = breakfast;
   const { value: isPaid } = paid;
   const status = "unconfirmed";
@@ -186,3 +187,53 @@ export async function createEditBooking({
 
   return data;
 }
+
+export const updateCabinAvailability = async (cabinId) => {
+  const { error } = await supabase
+    .from("cabins")
+    .update({ availability: false })
+    .eq("id", cabinId);
+  if (error) {
+    throw new Error(error.message);
+  }
+};
+
+// Function to check if a cabin is available for booking
+export const isCabinAvailable = (cabin, bookings, startDate) => {
+  if (!bookings) {
+    // Handle the case where bookings data is not available yet
+    return true;
+  }
+
+  const isAssignedToActiveBooking = bookings.some((booking) => {
+    return (
+      booking.cabinId === cabin.id &&
+      booking.status !== "checked-out" &&
+      new Date(booking.endDate) > new Date(startDate)
+    );
+  });
+  console.log("avai:", isAssignedToActiveBooking);
+
+  return !isAssignedToActiveBooking;
+};
+
+// Function to filter available cabins based on bookings
+export const filterAvailableCabins = async (cabins, startDate) => {
+  try {
+    const { data: bookings, error } = await supabase
+      .from("bookings")
+      .select("*");
+
+    console.log("hahha:", bookings);
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return cabins.filter((cabin) =>
+      isCabinAvailable(cabin, bookings, startDate)
+    );
+  } catch (error) {
+    console.error("Error fetching bookings:", error.message);
+    return [];
+  }
+};

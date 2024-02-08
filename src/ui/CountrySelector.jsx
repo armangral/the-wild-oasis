@@ -12,7 +12,6 @@ const StyledSelect = styled.select`
   background-color: var(--color-grey-0);
   font-weight: 500;
   box-shadow: var(--shadow-sm);
-  max-width: 300px;
 `;
 
 function CountrySelector({ options, value, onChange }) {
@@ -23,6 +22,9 @@ function CountrySelector({ options, value, onChange }) {
         onChange(options.find((option) => option.value === e.target.value))
       }
     >
+      <option value="" key="empty">
+        {" "}
+      </option>
       {options?.map((option) => (
         <option value={option.value} key={option.value}>
           {option.label}

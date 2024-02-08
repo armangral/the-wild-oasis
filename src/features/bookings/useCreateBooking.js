@@ -1,13 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { createEditBooking } from "../../services/apiBookings";
+import {
+  createEditBooking,
+  updateCabinAvailability,
+} from "../../services/apiBookings";
 
 export function useCreateBooking() {
   const queryClient = useQueryClient();
 
   const { mutate: createBooking, isLoading: isCreating } = useMutation({
     mutationFn: createEditBooking,
-    onSuccess: () => {
+    onSuccess: async (data) => {
+      await updateCabinAvailability(data?.cabinId);
       toast.success("New Booking successfully created");
       queryClient.invalidateQueries({ queryKey: ["bookings"] });
     },

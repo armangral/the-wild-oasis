@@ -23,6 +23,9 @@ function GuestSelector({ options, value, onChange }) {
         onChange(options.find((option) => option.fullName === e.target.value))
       }
     >
+      <option value="" key="empty">
+        {" "}
+      </option>
       {options?.map((option) => (
         <option value={option.fullName} key={option.fullName}>
           {option.fullName}

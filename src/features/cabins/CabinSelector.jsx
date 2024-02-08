@@ -23,6 +23,9 @@ function CabinSelector({ options, value, onChange }) {
         onChange(options.find((option) => option.name === e.target.value))
       }
     >
+      <option value="" key="empty">
+        {" "}
+      </option>
       {options?.map((option) => (
         <option value={option.name} key={option.name}>
           {option.name}

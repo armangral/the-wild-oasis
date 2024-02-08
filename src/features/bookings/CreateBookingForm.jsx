@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
@@ -16,21 +16,41 @@ import GuestSelector from "../guests/GuestSelector";
 import CabinSelector from "../cabins/CabinSelector";
 import CountrySelector from "../../ui/CountrySelector";
 import { isTodayOrFutureDate } from "../../utils/helpers";
+import {
+  filterAvailableCabins,
+  isCabinAvailable,
+} from "../../services/apiBookings";
 
 function CreateBookingForm({ onCloseModal }) {
   const { isCreating, createBooking } = useCreateBooking();
   const { isLoading: isLoadingGuests, guests } = useGuests();
   const { isLoading: isLoadingCabins, cabins } = useCabins();
 
+  const [cabinOptions, setCabinOptions] = useState([]);
+  const [startDate, setStartDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+
   const isWorking = isCreating || isLoadingGuests || isLoadingCabins;
 
-  const [guest, setGuest] = useState(guests ? guests[0] : "");
-  const [cabin, setCabin] = useState(cabins ? cabins[0] : "");
-  const [breakfast, setbreakfast] = useState({
-    value: "1",
-    label: "yes",
-  });
-  const [paid, setPaid] = useState({ value: "1", label: "yes" });
+  const [guest, setGuest] = useState(null);
+  const [cabin, setCabin] = useState(null);
+  const [breakfast, setbreakfast] = useState("");
+  const [paid, setPaid] = useState("");
+
+  useEffect(() => {
+    const fetchCabinOptions = async () => {
+      try {
+        const options = await filterAvailableCabins(cabins, startDate);
+        setCabinOptions(options);
+      } catch (error) {
+        console.error("Error fetching cabin options:", error.message);
+        setCabinOptions([]);
+      }
+    };
+
+    fetchCabinOptions();
+  }, [cabins, startDate]);
 
   const { register, handleSubmit, reset, getValues, formState } = useForm();
   const { errors } = formState;
@@ -58,7 +78,7 @@ function CreateBookingForm({ onCloseModal }) {
   const changeisPaid = (Paid) => {
     setPaid(Paid);
     console.log(guest);
-    console.log(cabin);
+    console.log(cabins);
   };
 
   const changeCabin = (selectedCabin) => {
@@ -112,7 +132,7 @@ function CreateBookingForm({ onCloseModal }) {
       </FormRow>
       <FormRow label="Cabin">
         <CabinSelector
-          options={cabins}
+          options={cabinOptions}
           value={cabin}
           onChange={changeCabin}
           disabled={isWorking}
@@ -149,6 +169,8 @@ function CreateBookingForm({ onCloseModal }) {
               );
             },
           })}
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
           disabled={isWorking}
         />
       </FormRow>
@@ -239,9 +261,7 @@ function CreateBookingForm({ onCloseModal }) {
           id="observations"
           defaultValue=""
           disabled={isWorking}
-          {...register("observations", {
-            required: "This field is required",
-          })}
+          {...register("observations")}
         />
       </FormRow>
       <FormRow>
